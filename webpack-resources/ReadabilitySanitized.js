@@ -3,22 +3,36 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
+const DOMPurify = require("dompurify");
 
-function postStateChanged(value) {
-    webkit.messageHandlers.readabilityMessageHandler.postMessage({Type: "StateChange", Value: value});
+function post(type, requestID, value) {
+    webkit.messageHandlers.readabilityMessageHandler.postMessage({
+        Type: type,
+        RequestID: requestID,
+        Value: value
+    });
 }
 
-if(isProbablyReaderable(document)) {
-    postStateChanged("Available")
-} else {
-    postStateChanged("Unavailable")
-}
+// Installed once in the content controller, then invoked by Swift after each
+// document finishes loading. Options and the request ID remain per-request data.
+window.__swiftReadabilityParseSanitized = function({ requestID, options }) {
+    try {
+        if (!isProbablyReaderable(document)) {
+            post("StateChange", requestID, "Unavailable");
+            return;
+        }
 
-var docStr = new XMLSerializer().serializeToString(document);
-const DOMPurify = require('dompurify');
-const clean = DOMPurify.sanitize(docStr, {WHOLE_DOCUMENT: true});
-var doc = new DOMParser().parseFromString(clean, "text/html");
-var readability = new Readability(doc, __READABILITY_OPTION__);
-const readabilityResult = readability.parse();
+        const serializedDocument = new XMLSerializer().serializeToString(document);
+        const cleanDocument = DOMPurify.sanitize(serializedDocument, { WHOLE_DOCUMENT: true });
+        const parsedDocument = new DOMParser().parseFromString(cleanDocument, "text/html");
+        const result = new Readability(parsedDocument, options).parse();
+        if (!result) {
+            post("StateChange", requestID, "Unavailable");
+            return;
+        }
 
-webkit.messageHandlers.readabilityMessageHandler.postMessage({Type: "ContentParsed", Value: JSON.stringify(readabilityResult)});
+        post("ContentParsed", requestID, JSON.stringify(result));
+    } catch (error) {
+        post("ParseError", requestID, String(error));
+    }
+};

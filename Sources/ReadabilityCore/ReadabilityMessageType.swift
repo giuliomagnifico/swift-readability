@@ -4,4 +4,6 @@ enum ReadabilityMessageType: String {
     case stateChange = "StateChange"
     /// Indicates that the content has been parsed.
     case contentParsed = "ContentParsed"
+    /// Indicates that parsing failed in JavaScript.
+    case parseError = "ParseError"
 }

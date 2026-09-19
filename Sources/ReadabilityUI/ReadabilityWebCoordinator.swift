@@ -74,11 +74,11 @@ public final class ReadabilityWebCoordinator: ObservableObject {
 
         messageHandler.subscribeEvent { [weak self] event in
             switch event {
-            case let .availabilityChanged(availability):
+            case let .availabilityChanged(_, availability):
                 self?.availabilityChangedContinuation.yield(availability)
             case let .contentParsedAndGeneratedHTML(html: html):
                 self?.contentParsedContinuation.yield(html)
-            case .contentParsed:
+            case .contentParsed, .parseFailed, .protocolViolation:
                 break
             }
         }

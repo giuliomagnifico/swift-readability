@@ -1,75 +1,93 @@
 import Foundation
 import WebKit
 
-/// A message handler for receiving messages from injected JavaScript in the WKWebView.
+/// Receives messages emitted by the scripts installed in a `WKWebView`.
 @MainActor
 package final class ReadabilityMessageHandler<Generator: ReaderContentGeneratable>: NSObject, WKScriptMessageHandler {
-    /// Modes that determine how the message handler processes content.
     package enum Mode {
-        /// Generates reader HTML using the provided initial style.
         case generateReaderHTML(initialStyle: ReaderStyle)
-        /// Returns the raw readability result.
         case generateReadabilityResult
     }
 
-    /// Events emitted by the message handler.
     package enum Event {
-        /// The readability content was parsed and reader HTML was generated.
         case contentParsedAndGeneratedHTML(html: String)
-        /// The readability content was parsed.
-        case contentParsed(readabilityResult: ReadabilityResult)
-        /// The availability status of the reader changed.
-        case availabilityChanged(availability: ReaderAvailability)
+        case contentParsed(requestID: UInt64?, readabilityResult: ReadabilityResult)
+        case parseFailed(requestID: UInt64?, message: String)
+        case availabilityChanged(requestID: UInt64?, availability: ReaderAvailability)
+        case protocolViolation
     }
 
-    // The generator used to produce reader HTML from the readability result.
     private let readerContentGenerator: Generator
     private let mode: Mode
+    private let requiresRequestID: Bool
 
-    /// A closure that is called when an event is received.
     package var eventHandler: (@MainActor (Event) -> Void)?
 
-    package init(mode: Mode, readerContentGenerator: Generator) {
+    package init(
+        mode: Mode,
+        readerContentGenerator: Generator,
+        requiresRequestID: Bool = false
+    ) {
         self.mode = mode
         self.readerContentGenerator = readerContentGenerator
+        self.requiresRequestID = requiresRequestID
     }
 
     package func userContentController(_: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let message = message.body as? [String: Any],
-              let typeString = message["Type"] as? String,
-              let type = ReadabilityMessageType(rawValue: typeString),
-              let value = message["Value"]
+        guard let body = message.body as? [String: Any],
+              let typeString = body["Type"] as? String,
+              let type = ReadabilityMessageType(rawValue: typeString)
         else {
+            eventHandler?(.protocolViolation)
+            return
+        }
+
+        let requestID = (body["RequestID"] as? NSNumber)?.uint64Value
+        guard !requiresRequestID || requestID != nil else {
+            eventHandler?(.protocolViolation)
             return
         }
 
         switch type {
         case .stateChange:
-            if let availability = ReaderAvailability(rawValue: value as? String ?? "") {
-                eventHandler?(.availabilityChanged(availability: availability))
+            guard let value = body["Value"] as? String,
+                  let availability = ReaderAvailability(rawValue: value)
+            else {
+                eventHandler?(.protocolViolation)
+                return
             }
+            eventHandler?(.availabilityChanged(requestID: requestID, availability: availability))
+
+        case .parseError:
+            guard let value = body["Value"] as? String else {
+                eventHandler?(.protocolViolation)
+                return
+            }
+            eventHandler?(.parseFailed(requestID: requestID, message: value))
+
         case .contentParsed:
-            Task.detached { [weak self, mode] in
-                if let jsonString = value as? String,
-                   let jsonData = jsonString.data(using: .utf8),
-                   let result = try? JSONDecoder().decode(ReadabilityResult.self, from: jsonData)
-                {
-                    switch mode {
-                    case let .generateReaderHTML(initialStyle):
-                        if let html = await self?.readerContentGenerator.generate(result, initialStyle: initialStyle) {
-                            await self?.eventHandler?(.contentParsedAndGeneratedHTML(html: html))
-                        }
-                    case .generateReadabilityResult:
-                        await self?.eventHandler?(.contentParsed(readabilityResult: result))
-                    }
+            guard let jsonString = body["Value"] as? String,
+                  let jsonData = jsonString.data(using: .utf8),
+                  let result = try? JSONDecoder().decode(ReadabilityResult.self, from: jsonData)
+            else {
+                eventHandler?(.protocolViolation)
+                return
+            }
+
+            switch mode {
+            case .generateReadabilityResult:
+                eventHandler?(.contentParsed(requestID: requestID, readabilityResult: result))
+            case let .generateReaderHTML(initialStyle):
+                Task { @MainActor [weak self] in
+                    guard let self,
+                          let html = await readerContentGenerator.generate(result, initialStyle: initialStyle)
+                    else { return }
+                    eventHandler?(.contentParsedAndGeneratedHTML(html: html))
                 }
             }
         }
     }
 
-    /// Subscribes to events emitted by the message handler.
-    ///
-    /// - Parameter operation: A closure to be invoked when an event occurs, or `nil` to unsubscribe.
     package func subscribeEvent(_ operation: (@MainActor (Event) -> Void)?) {
         eventHandler = operation
     }

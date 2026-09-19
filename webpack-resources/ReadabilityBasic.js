@@ -1,19 +1,30 @@
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
 
-function postStateChanged(value) {
-    webkit.messageHandlers.readabilityMessageHandler.postMessage({Type: "StateChange", Value: value});
+function post(type, requestID, value) {
+    webkit.messageHandlers.readabilityMessageHandler.postMessage({
+        Type: type,
+        RequestID: requestID,
+        Value: value
+    });
 }
 
-if(isProbablyReaderable(document)) {
-    postStateChanged("Available")
-} else {
-    postStateChanged("Unavailable")
-}
+// Installed once in the content controller, then invoked by Swift after each
+// document finishes loading. Options and the request ID remain per-request data.
+window.__swiftReadabilityParseBasic = function({ requestID, options }) {
+    try {
+        if (!isProbablyReaderable(document)) {
+            post("StateChange", requestID, "Unavailable");
+            return;
+        }
 
-var documentClone = document.cloneNode(true);
-const readabilityResult = new Readability(
-    documentClone,
-    __READABILITY_OPTION__
-).parse();
+        const result = new Readability(document.cloneNode(true), options).parse();
+        if (!result) {
+            post("StateChange", requestID, "Unavailable");
+            return;
+        }
 
-webkit.messageHandlers.readabilityMessageHandler.postMessage({Type: "ContentParsed", Value: JSON.stringify(readabilityResult)});
+        post("ContentParsed", requestID, JSON.stringify(result));
+    } catch (error) {
+        post("ParseError", requestID, String(error));
+    }
+};
