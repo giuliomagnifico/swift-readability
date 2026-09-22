@@ -1,3 +1,4 @@
+import Foundation
 import ReadabilityCore
 import WebKit
 
@@ -21,11 +22,33 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
     private var reservedRequestID: UInt64?
     private var activeRequest: ActiveRequest?
 
+    private static let defaultParseDeadline: TimeInterval = 10
+    private var parseDeadline: TimeInterval
+    private var suppressedParserInvocations: Int
+
     var registeredUserScriptCount: Int { contentController.userScripts.count }
 
     override init() {
+        parseDeadline = Self.defaultParseDeadline
+        suppressedParserInvocations = 0
         super.init()
         createWebView()
+    }
+
+    init(parseDeadline: TimeInterval, suppressedParserInvocations: Int = 0) {
+        self.parseDeadline = parseDeadline
+        self.suppressedParserInvocations = suppressedParserInvocations
+        super.init()
+        createWebView()
+    }
+
+    var activeRequestIDForTesting: UInt64? { activeRequest?.id }
+    var hasActiveTimeoutTaskForTesting: Bool { activeRequest?.deadlineTask != nil }
+    var hasSuppressedParserInvocationForTesting: Bool { suppressedParserInvocations > 0 }
+    var registeredMessageHandlerCountForTesting: Int { messageHandler == nil ? 0 : 1 }
+
+    func setParseDeadlineForTesting(_ deadline: TimeInterval) {
+        parseDeadline = deadline
     }
 
     func parseHTML(
@@ -73,6 +96,12 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
                     optionsJSON: optionsJSON,
                     completion: continuation
                 )
+                activeRequest?.deadlineTask = Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    try? await Task.sleep(nanoseconds: UInt64(self.parseDeadline * 1_000_000_000))
+                    guard !Task.isCancelled else { return }
+                    self.expireRequest(id: requestID)
+                }
 
                 guard let navigation = webView.loadHTMLString(html, baseURL: baseURL) else {
                     failActiveRequest(with: Error.navigationDidNotStart, invalidate: true)
@@ -94,7 +123,11 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
               activeNavigation === navigation
         else { return }
 
-        invokeParser(for: activeRequest)
+        if suppressedParserInvocations > 0 {
+            suppressedParserInvocations -= 1
+        } else {
+            invokeParser(for: activeRequest)
+        }
     }
 
     func webView(_: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError _: Swift.Error) {
@@ -196,11 +229,13 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
         case let .contentParsed(requestID, result):
             guard requestID == activeRequest.id else { return }
             completeActiveRequest(.success(result))
-        case let .availabilityChanged(requestID, availability):
+        case let .contentParseFailed(requestID):
             guard requestID == activeRequest.id else { return }
-            if availability == .unavailable {
-                completeActiveRequest(.failure(Error.readerIsUnavailable))
-            }
+            completeActiveRequest(.failure(Error.readerIsUnavailable))
+        case .availabilityChanged:
+            // `isProbablyReaderable` is advisory: parsing can still succeed for pages
+            // dominated by lists, tables, or figures.
+            break
         case let .parseFailed(requestID, _):
             guard requestID == activeRequest.id else { return }
             failActiveRequest(with: .javaScriptFailed, invalidate: true)
@@ -209,6 +244,10 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
         case .contentParsedAndGeneratedHTML:
             failActiveRequest(with: .protocolViolation, invalidate: true)
         }
+    }
+
+    func deliverLateContentParsedForTesting(requestID: UInt64, result: ReadabilityResult) {
+        handle(.contentParsed(requestID: requestID, readabilityResult: result))
     }
 
     private func cancelRequest(id: UInt64) {
@@ -237,6 +276,11 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
         failActiveRequest(with: error, invalidate: true)
     }
 
+    private func expireRequest(id: UInt64) {
+        guard activeRequest?.id == id else { return }
+        failActiveRequest(with: .readerIsUnavailable, invalidate: true)
+    }
+
     private func failActiveRequest(with error: Error, invalidate: Bool) {
         completeActiveRequest(.failure(error))
         if invalidate {
@@ -247,6 +291,7 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
     private func completeActiveRequest(_ result: Result<ReadabilityResult, Swift.Error>) {
         guard let request = activeRequest else { return }
         activeRequest = nil
+        request.deadlineTask?.cancel()
         request.completion.resume(with: result)
     }
 
@@ -273,6 +318,7 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
         let functionName: String
         let optionsJSON: String
         var navigation: WKNavigation?
+        var deadlineTask: Task<Void, Never>?
         let completion: CheckedContinuation<ReadabilityResult, Swift.Error>
     }
 

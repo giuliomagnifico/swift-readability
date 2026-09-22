@@ -85,6 +85,89 @@ final class ReadabilityTests: XCTestCase {
         }
     }
 
+    func testParsesContentThatIsProbablyReaderableWouldReject() async throws {
+        let html = """
+        <html><body><article>
+        <p>A short intro line that is not long enough to score on its own.</p>
+        <ul>
+        <li><a href="https://example.com/1">Link one</a></li>
+        <li><a href="https://example.com/2">Link two</a></li>
+        <li><a href="https://example.com/3">Link three</a></li>
+        </ul>
+        <p>\(String(repeating: "Disclosure text that pads this paragraph out. ", count: 10))</p>
+        </article></body></html>
+        """
+
+        let result = try await Readability().parse(html: html, options: nil, baseURL: nil)
+        XCTAssertFalse(result.textContent.isEmpty)
+    }
+
+    func testTimeoutIgnoresLateCallbackAndRecoversForSubsequentParses() async throws {
+        let runner = ReadabilityRunner(parseDeadline: 0.5, suppressedParserInvocations: 1)
+        let first = Task { @MainActor in
+            try await runner.parseHTML(
+                articleHTML(title: "A"),
+                options: .init(charThreshold: 100),
+                baseURL: URL(string: "https://example.com/a")
+            )
+        }
+
+        let firstRequestID = try await activeRequestID(of: runner)
+        try await waitForSuppressedParserInvocation(of: runner)
+
+        do {
+            _ = try await first.value
+            XCTFail("Expected A to time out")
+        } catch is CancellationError {
+            XCTFail("Expected a timeout, not cancellation")
+        } catch {
+            // Expected: the timed-out request is completed exactly once with an internal error.
+        }
+
+        XCTAssertNil(runner.activeRequestIDForTesting)
+        XCTAssertFalse(runner.hasActiveTimeoutTaskForTesting)
+        XCTAssertEqual(runner.registeredUserScriptCount, 0)
+        XCTAssertEqual(runner.registeredMessageHandlerCountForTesting, 1)
+
+        runner.deliverLateContentParsedForTesting(requestID: firstRequestID, result: try result(title: "Late A"))
+        XCTAssertNil(runner.activeRequestIDForTesting)
+        XCTAssertFalse(runner.hasActiveTimeoutTaskForTesting)
+
+        runner.setParseDeadlineForTesting(10)
+
+        let second: ReadabilityResult
+        do {
+            second = try await runner.parseHTML(
+                articleHTML(title: "B"),
+                options: .init(charThreshold: 100, shouldSanitize: true),
+                baseURL: URL(string: "https://example.com/b")
+            )
+        } catch {
+            XCTFail("B failed after A timed out: \(error)")
+            return
+        }
+        XCTAssertEqual(second.title, "B")
+        XCTAssertEqual(runner.registeredUserScriptCount, 2)
+        XCTAssertEqual(runner.registeredMessageHandlerCountForTesting, 1)
+        XCTAssertFalse(runner.hasActiveTimeoutTaskForTesting)
+
+        let third: ReadabilityResult
+        do {
+            third = try await runner.parseHTML(
+                articleHTML(title: "C"),
+                options: .init(charThreshold: 100),
+                baseURL: URL(string: "https://example.com/c")
+            )
+        } catch {
+            XCTFail("C failed after B recovered: \(error)")
+            return
+        }
+        XCTAssertEqual(third.title, "C")
+        XCTAssertEqual(runner.registeredUserScriptCount, 2)
+        XCTAssertEqual(runner.registeredMessageHandlerCountForTesting, 1)
+        XCTAssertFalse(runner.hasActiveTimeoutTaskForTesting)
+    }
+
     func testBenchmarkPersistentRunner() async throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["READABILITY_BENCHMARK"] == "1")
 
@@ -118,6 +201,44 @@ final class ReadabilityTests: XCTestCase {
     private func milliseconds(_ duration: Duration) -> String {
         let milliseconds = Double(duration.components.seconds) * 1_000 + Double(duration.components.attoseconds) / 1_000_000_000_000_000
         return String(format: "%.1fms", milliseconds)
+    }
+
+    private func activeRequestID(of runner: ReadabilityRunner) async throws -> UInt64 {
+        for _ in 0 ..< 100 {
+            if let requestID = runner.activeRequestIDForTesting {
+                return requestID
+            }
+            await Task.yield()
+        }
+        throw XCTSkip("The runner did not begin A before the test deadline")
+    }
+
+    private func waitForSuppressedParserInvocation(of runner: ReadabilityRunner) async throws {
+        for _ in 0 ..< 100 {
+            if !runner.hasSuppressedParserInvocationForTesting {
+                return
+            }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        throw XCTSkip("The runner did not suppress A's parser invocation before the test deadline")
+    }
+
+    private func result(title: String) throws -> ReadabilityResult {
+        let json = """
+        {
+          "title": "\(title)",
+          "byline": null,
+          "content": "<p>Body</p>",
+          "textContent": "Body",
+          "length": 4,
+          "excerpt": "Body",
+          "siteName": null,
+          "lang": null,
+          "dir": null,
+          "publishedTime": null
+        }
+        """
+        return try JSONDecoder().decode(ReadabilityResult.self, from: Data(json.utf8))
     }
 
     private func XCTAssertThrowsCancellation(_ task: Task<ReadabilityResult, Error>) async {

@@ -12,6 +12,7 @@ package final class ReadabilityMessageHandler<Generator: ReaderContentGeneratabl
     package enum Event {
         case contentParsedAndGeneratedHTML(html: String)
         case contentParsed(requestID: UInt64?, readabilityResult: ReadabilityResult)
+        case contentParseFailed(requestID: UInt64?)
         case parseFailed(requestID: UInt64?, message: String)
         case availabilityChanged(requestID: UInt64?, availability: ReaderAvailability)
         case protocolViolation
@@ -70,7 +71,7 @@ package final class ReadabilityMessageHandler<Generator: ReaderContentGeneratabl
                   let jsonData = jsonString.data(using: .utf8),
                   let result = try? JSONDecoder().decode(ReadabilityResult.self, from: jsonData)
             else {
-                eventHandler?(.protocolViolation)
+                eventHandler?(.contentParseFailed(requestID: requestID))
                 return
             }
 
