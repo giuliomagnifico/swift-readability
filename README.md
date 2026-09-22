@@ -4,15 +4,47 @@ This library provides a seamless way to detect, parse, and display reader-friend
 
 ![Language:Swift](https://img.shields.io/static/v1?label=Language&message=Swift&color=orange&style=flat-square)
 ![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
-[![Latest Release](https://img.shields.io/github/v/release/Ryu0118/swift-readability?style=flat-square)](https://github.com/Ryu0118/swift-readability/releases/latest)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FRyu0118%2Fswift-readability%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Ryu0118/swift-readability)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FRyu0118%2Fswift-readability%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/Ryu0118/swift-readability)
+[![Latest Release](https://img.shields.io/github/v/release/giuliomagnifico/swift-readability?style=flat-square)](https://github.com/giuliomagnifico/swift-readability/releases/latest)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgiuliomagnifico%2Fswift-readability%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/giuliomagnifico/swift-readability)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgiuliomagnifico%2Fswift-readability%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/giuliomagnifico/swift-readability)
 [![X](https://img.shields.io/twitter/follow/ryu_hu03?style=social)](https://x.com/ryu_hu03)
 
 
 |  light  |  dark  |  sepia  |
 | ---- | ---- | ---- |
 |  <img src="https://github.com/user-attachments/assets/ed112ac7-1f01-4b64-97d1-a22f78968cc8" width="200">  |  <img src="https://github.com/user-attachments/assets/2be2c140-d17e-444f-8a33-6c66e0203058" width="200">  |  <img src="https://github.com/user-attachments/assets/cccb813b-3e02-41da-a944-d9f786518d6d" width="200">  |
+
+## About this fork
+
+This project is a fork of [Ryu0118/swift-readability](https://github.com/Ryu0118/swift-readability) and retains its `@mozilla/readability` foundation, general features, API surface, credits, and license information.
+
+The fork was originally developed for [Lettura](https://www.giuliomagnifico.dev/apps/lettura/), a native RSS reader for Apple platforms where article extraction is invoked repeatedly while opening articles. It is optimized for repeated parsing workloads by reusing a persistent `WKWebView` runner rather than creating a new web view for every parse.
+
+The runner installs its JavaScript bootstrap scripts once and reuses them. It has single-flight semantics: starting a new parse can invalidate or cancel the currently active parse. Request IDs reject stale callbacks, every parse has a global 10-second deadline, and the runner recovers after cancellation, timeout, or WebKit failure so it remains usable. `isProbablyReaderable` is treated as a heuristic rather than a gate, so `Readability.parse()` is still attempted when the heuristic returns `false`.
+
+This is a deliberate trade-off, not a universal replacement for upstream. Upstream creates a separate `WKWebView` for each parse, providing stronger isolation and allowing independent concurrent parses. This fork prioritizes runner reuse and lower repeated-parsing overhead.
+
+## Performance
+
+Repository benchmarks for the persistent runner:
+
+| Fixture | Persistent median | Cold median |
+| ------- | ----------------: | ----------: |
+| Small   |            2.8 ms |     64.9 ms |
+| Medium  |            7.7 ms |     66.5 ms |
+| Large   |           31.7 ms |     89.6 ms |
+
+“Persistent” reuses the existing runner and `WKWebView`; “cold” creates and uses a fresh runner and web view for the parse. These are repository benchmark results, not general performance guarantees: real-world performance depends on hardware, HTML complexity, and workload.
+
+Run the benchmark with:
+
+```sh
+READABILITY_BENCHMARK=1 swift test --filter ReadabilityTests/testBenchmarkPersistentRunner
+```
+
+## Reliability
+
+The persistent-runner tests cover sequential parsing, 100 consecutive parses on one runner, cancellation followed by successful recovery, timeout followed by a stale callback and recovery, and successful subsequent parsing after timeout or cancellation. They also cover stale-callback protection, no accumulation of `WKUserScript` instances or message handlers, and cases where `isProbablyReaderable` returns `false` while `Readability.parse()` succeeds.
 
 
 ## Features
@@ -28,8 +60,11 @@ Easily toggle a reader overlay with customizable themes and font sizes.
 
 ## Installation
 swift-readability is available via the Swift Package Manager
-```Swift
-.package(url: "https://github.com/Ryu0118/swift-readability", exact: "0.3.0")
+```swift
+.package(
+    url: "https://github.com/giuliomagnifico/swift-readability",
+    .upToNextMinor(from: "0.4.1")
+)
 ```
 
 ## Usage
