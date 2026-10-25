@@ -1,0 +1,938 @@
+[
+  {
+    "configurationMilliseconds" : 0.000500003807246685,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 1231.2603750033304,
+    "policy" : "allowAll",
+    "repetition" : 0,
+    "requests" : {
+      "\/small-fast\/beacon" : 1,
+      "\/small-fast\/external.css" : 1,
+      "\/small-fast\/external.js" : 1,
+      "\/small-fast\/fetch" : 1,
+      "\/small-fast\/font.woff2" : 1,
+      "\/small-fast\/frame" : 1,
+      "\/small-fast\/large.png" : 1,
+      "\/small-fast\/poster.png" : 1
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 2.8909583343192935
+  },
+  {
+    "configurationMilliseconds" : 0.016874982975423336,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 53.02250001113862,
+    "policy" : "blockExternalResources",
+    "repetition" : 0,
+    "requests" : {
+
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "memory",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 2.193541615270078
+  },
+  {
+    "configurationMilliseconds" : 0.0007500057108700275,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 22.485250025056303,
+    "policy" : "blockExternalResources",
+    "repetition" : 1,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0009583309292793274,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 29.632583376951516,
+    "policy" : "allowAll",
+    "repetition" : 1,
+    "requests" : {
+      "\/small-fast\/beacon" : 1,
+      "\/small-fast\/external.css" : 1,
+      "\/small-fast\/external.js" : 1,
+      "\/small-fast\/fetch" : 1,
+      "\/small-fast\/font.woff2" : 1,
+      "\/small-fast\/frame" : 1,
+      "\/small-fast\/large.png" : 1,
+      "\/small-fast\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0006249756552278996,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 29.545500001404434,
+    "policy" : "allowAll",
+    "repetition" : 2,
+    "requests" : {
+      "\/small-fast\/beacon" : 1,
+      "\/small-fast\/external.css" : 1,
+      "\/small-fast\/external.js" : 1,
+      "\/small-fast\/fetch" : 1,
+      "\/small-fast\/font.woff2" : 1,
+      "\/small-fast\/frame" : 1,
+      "\/small-fast\/large.png" : 1,
+      "\/small-fast\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0009166542440652847,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 14.645125018432736,
+    "policy" : "blockExternalResources",
+    "repetition" : 2,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0008333590812981129,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 15.057624957989901,
+    "policy" : "blockExternalResources",
+    "repetition" : 3,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0009166542440652847,
+    "contentDigest" : "11d3bf140c3128a4789a6726bab454a743467d9a9885e03ad79d6d88eabd816d",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 51.890791684854776,
+    "policy" : "allowAll",
+    "repetition" : 3,
+    "requests" : {
+      "\/small-fast\/beacon" : 1,
+      "\/small-fast\/external.css" : 1,
+      "\/small-fast\/external.js" : 1,
+      "\/small-fast\/fetch" : 1,
+      "\/small-fast\/font.woff2" : 1,
+      "\/small-fast\/frame" : 1,
+      "\/small-fast\/large.png" : 1,
+      "\/small-fast\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.004250032361596823,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 1644.164333352819,
+    "policy" : "blockExternalResources",
+    "repetition" : 0,
+    "requests" : {
+
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "memory",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 2.883500012103468
+  },
+  {
+    "configurationMilliseconds" : 0.000500003807246685,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 558.232749986928,
+    "policy" : "allowAll",
+    "repetition" : 0,
+    "requests" : {
+      "\/small-slow\/beacon" : 1,
+      "\/small-slow\/external.css" : 1,
+      "\/small-slow\/external.js" : 1,
+      "\/small-slow\/fetch" : 1,
+      "\/small-slow\/font.woff2" : 1,
+      "\/small-slow\/frame" : 1,
+      "\/small-slow\/large.png" : 1,
+      "\/small-slow\/poster.png" : 1
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 2.5845833588391542
+  },
+  {
+    "configurationMilliseconds" : 0.000500003807246685,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 559.8423749906942,
+    "policy" : "allowAll",
+    "repetition" : 1,
+    "requests" : {
+      "\/small-slow\/beacon" : 1,
+      "\/small-slow\/external.css" : 1,
+      "\/small-slow\/external.js" : 1,
+      "\/small-slow\/fetch" : 1,
+      "\/small-slow\/font.woff2" : 1,
+      "\/small-slow\/frame" : 1,
+      "\/small-slow\/large.png" : 1,
+      "\/small-slow\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.002374988980591297,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 42.7621667040512,
+    "policy" : "blockExternalResources",
+    "repetition" : 1,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.002083310391753912,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 29.814499954227358,
+    "policy" : "blockExternalResources",
+    "repetition" : 2,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0015416881069540977,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 586.482500017155,
+    "policy" : "allowAll",
+    "repetition" : 2,
+    "requests" : {
+      "\/small-slow\/beacon" : 1,
+      "\/small-slow\/external.css" : 1,
+      "\/small-slow\/external.js" : 1,
+      "\/small-slow\/fetch" : 1,
+      "\/small-slow\/font.woff2" : 1,
+      "\/small-slow\/frame" : 1,
+      "\/small-slow\/large.png" : 1,
+      "\/small-slow\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0024999608285725117,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 598.7391666858457,
+    "policy" : "allowAll",
+    "repetition" : 3,
+    "requests" : {
+      "\/small-slow\/beacon" : 1,
+      "\/small-slow\/external.css" : 1,
+      "\/small-slow\/external.js" : 1,
+      "\/small-slow\/fetch" : 1,
+      "\/small-slow\/font.woff2" : 1,
+      "\/small-slow\/frame" : 1,
+      "\/small-slow\/large.png" : 1,
+      "\/small-slow\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0028333161026239395,
+    "contentDigest" : "2b3c95cc65bc639ddebeb87aa23b6c9ea22b34e2330adb41b43f26ffd6e5a21a",
+    "fixture" : "small",
+    "htmlBytes" : 3969,
+    "parseMilliseconds" : 41.254833340644836,
+    "policy" : "blockExternalResources",
+    "repetition" : 3,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0014999532140791416,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 1359.0372083708644,
+    "policy" : "allowAll",
+    "repetition" : 0,
+    "requests" : {
+      "\/small-unavailable\/beacon" : 1,
+      "\/small-unavailable\/external.css" : 1,
+      "\/small-unavailable\/external.js" : 1,
+      "\/small-unavailable\/fetch" : 1,
+      "\/small-unavailable\/font.woff2" : 1,
+      "\/small-unavailable\/frame" : 1,
+      "\/small-unavailable\/large.png" : 1,
+      "\/small-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 6.668750022072345
+  },
+  {
+    "configurationMilliseconds" : 0.010416668374091387,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 70.65966667141765,
+    "policy" : "blockExternalResources",
+    "repetition" : 0,
+    "requests" : {
+
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "memory",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 5.007750005461276
+  },
+  {
+    "configurationMilliseconds" : 0.0005416804924607277,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 25.41904168901965,
+    "policy" : "blockExternalResources",
+    "repetition" : 1,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.000625033862888813,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 172.6917083724402,
+    "policy" : "allowAll",
+    "repetition" : 1,
+    "requests" : {
+      "\/small-unavailable\/beacon" : 1,
+      "\/small-unavailable\/external.css" : 1,
+      "\/small-unavailable\/external.js" : 1,
+      "\/small-unavailable\/fetch" : 1,
+      "\/small-unavailable\/font.woff2" : 1,
+      "\/small-unavailable\/frame" : 1,
+      "\/small-unavailable\/large.png" : 1,
+      "\/small-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.000500003807246685,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 153.779708314687,
+    "policy" : "allowAll",
+    "repetition" : 2,
+    "requests" : {
+      "\/small-unavailable\/beacon" : 1,
+      "\/small-unavailable\/external.css" : 1,
+      "\/small-unavailable\/external.js" : 1,
+      "\/small-unavailable\/fetch" : 1,
+      "\/small-unavailable\/font.woff2" : 1,
+      "\/small-unavailable\/frame" : 1,
+      "\/small-unavailable\/large.png" : 1,
+      "\/small-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0008749775588512421,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 17.37812504870817,
+    "policy" : "blockExternalResources",
+    "repetition" : 2,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.000625033862888813,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 16.505500010680407,
+    "policy" : "blockExternalResources",
+    "repetition" : 3,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0005416222847998142,
+    "contentDigest" : "350f44359f1f42be66c5bac899e58a2866be367d397543f229e6ef59226fbe6e",
+    "fixture" : "small",
+    "htmlBytes" : 4067,
+    "parseMilliseconds" : 137.4804166262038,
+    "policy" : "allowAll",
+    "repetition" : 3,
+    "requests" : {
+      "\/small-unavailable\/beacon" : 1,
+      "\/small-unavailable\/external.css" : 1,
+      "\/small-unavailable\/external.js" : 1,
+      "\/small-unavailable\/fetch" : 1,
+      "\/small-unavailable\/font.woff2" : 1,
+      "\/small-unavailable\/frame" : 1,
+      "\/small-unavailable\/large.png" : 1,
+      "\/small-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0046666827984154224,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 1536.8790833745152,
+    "policy" : "blockExternalResources",
+    "repetition" : 0,
+    "requests" : {
+
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "memory",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 2.8748750337399542
+  },
+  {
+    "configurationMilliseconds" : 0.0005416804924607277,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 86.16604167036712,
+    "policy" : "allowAll",
+    "repetition" : 0,
+    "requests" : {
+      "\/complex-fast\/beacon" : 1,
+      "\/complex-fast\/external.css" : 1,
+      "\/complex-fast\/external.js" : 1,
+      "\/complex-fast\/fetch" : 1,
+      "\/complex-fast\/font.woff2" : 1,
+      "\/complex-fast\/frame" : 1,
+      "\/complex-fast\/large.png" : 1,
+      "\/complex-fast\/poster.png" : 1
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 3.05070832837373
+  },
+  {
+    "configurationMilliseconds" : 0.0006249756552278996,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 30.887583387084305,
+    "policy" : "allowAll",
+    "repetition" : 1,
+    "requests" : {
+      "\/complex-fast\/beacon" : 1,
+      "\/complex-fast\/external.css" : 1,
+      "\/complex-fast\/external.js" : 1,
+      "\/complex-fast\/fetch" : 1,
+      "\/complex-fast\/font.woff2" : 1,
+      "\/complex-fast\/frame" : 1,
+      "\/complex-fast\/large.png" : 1,
+      "\/complex-fast\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0009166542440652847,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 18.293041677679867,
+    "policy" : "blockExternalResources",
+    "repetition" : 1,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0005832989700138569,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 18.81391671486199,
+    "policy" : "blockExternalResources",
+    "repetition" : 2,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0006249756552278996,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 34.74250005092472,
+    "policy" : "allowAll",
+    "repetition" : 2,
+    "requests" : {
+      "\/complex-fast\/beacon" : 1,
+      "\/complex-fast\/external.css" : 1,
+      "\/complex-fast\/external.js" : 1,
+      "\/complex-fast\/fetch" : 1,
+      "\/complex-fast\/font.woff2" : 1,
+      "\/complex-fast\/frame" : 1,
+      "\/complex-fast\/large.png" : 1,
+      "\/complex-fast\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0006249756552278996,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 52.81916668172926,
+    "policy" : "allowAll",
+    "repetition" : 3,
+    "requests" : {
+      "\/complex-fast\/beacon" : 1,
+      "\/complex-fast\/external.css" : 1,
+      "\/complex-fast\/external.js" : 1,
+      "\/complex-fast\/fetch" : 1,
+      "\/complex-fast\/font.woff2" : 1,
+      "\/complex-fast\/frame" : 1,
+      "\/complex-fast\/large.png" : 1,
+      "\/complex-fast\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0006666523404419422,
+    "contentDigest" : "dcb147d9c9331ee8636d6017ea37cf568854583aaf8ca7f12968a4aed209d210",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 16.886791621800512,
+    "policy" : "blockExternalResources",
+    "repetition" : 3,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "fast",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0007083290256559849,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 1758.7468333076686,
+    "policy" : "allowAll",
+    "repetition" : 0,
+    "requests" : {
+      "\/complex-slow\/beacon" : 1,
+      "\/complex-slow\/external.css" : 1,
+      "\/complex-slow\/external.js" : 1,
+      "\/complex-slow\/fetch" : 1,
+      "\/complex-slow\/font.woff2" : 1,
+      "\/complex-slow\/frame" : 1,
+      "\/complex-slow\/large.png" : 1,
+      "\/complex-slow\/poster.png" : 1
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 2.572041703388095
+  },
+  {
+    "configurationMilliseconds" : 0.01712498487904668,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 81.83762495173141,
+    "policy" : "blockExternalResources",
+    "repetition" : 0,
+    "requests" : {
+
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "memory",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 2.6527500012889504
+  },
+  {
+    "configurationMilliseconds" : 0.0006249756552278996,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 18.25104164890945,
+    "policy" : "blockExternalResources",
+    "repetition" : 1,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.000500003807246685,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 563.5117083438672,
+    "policy" : "allowAll",
+    "repetition" : 1,
+    "requests" : {
+      "\/complex-slow\/beacon" : 1,
+      "\/complex-slow\/external.css" : 1,
+      "\/complex-slow\/external.js" : 1,
+      "\/complex-slow\/fetch" : 1,
+      "\/complex-slow\/font.woff2" : 1,
+      "\/complex-slow\/frame" : 1,
+      "\/complex-slow\/large.png" : 1,
+      "\/complex-slow\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0005833571776747704,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 570.8343333099037,
+    "policy" : "allowAll",
+    "repetition" : 2,
+    "requests" : {
+      "\/complex-slow\/beacon" : 1,
+      "\/complex-slow\/external.css" : 1,
+      "\/complex-slow\/external.js" : 1,
+      "\/complex-slow\/fetch" : 1,
+      "\/complex-slow\/font.woff2" : 1,
+      "\/complex-slow\/frame" : 1,
+      "\/complex-slow\/large.png" : 1,
+      "\/complex-slow\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.001083302777260542,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 21.728749969042838,
+    "policy" : "blockExternalResources",
+    "repetition" : 2,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0005832989700138569,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 20.601458323653787,
+    "policy" : "blockExternalResources",
+    "repetition" : 3,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0005833571776747704,
+    "contentDigest" : "d164ea2d0941e5514363dd87c9344746de42d372e32f2396b77241ebaff4a4d2",
+    "fixture" : "complex",
+    "htmlBytes" : 34057,
+    "parseMilliseconds" : 571.16108329501,
+    "policy" : "allowAll",
+    "repetition" : 3,
+    "requests" : {
+      "\/complex-slow\/beacon" : 1,
+      "\/complex-slow\/external.css" : 1,
+      "\/complex-slow\/external.js" : 1,
+      "\/complex-slow\/fetch" : 1,
+      "\/complex-slow\/font.woff2" : 1,
+      "\/complex-slow\/frame" : 1,
+      "\/complex-slow\/large.png" : 1,
+      "\/complex-slow\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "slow",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.011333322618156672,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 1537.063500029035,
+    "policy" : "blockExternalResources",
+    "repetition" : 0,
+    "requests" : {
+
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "memory",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 6.480374955572188
+  },
+  {
+    "configurationMilliseconds" : 0.0005833571776747704,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 170.18383333925158,
+    "policy" : "allowAll",
+    "repetition" : 0,
+    "requests" : {
+      "\/complex-unavailable\/beacon" : 1,
+      "\/complex-unavailable\/external.css" : 1,
+      "\/complex-unavailable\/external.js" : 1,
+      "\/complex-unavailable\/fetch" : 1,
+      "\/complex-unavailable\/font.woff2" : 1,
+      "\/complex-unavailable\/frame" : 1,
+      "\/complex-unavailable\/large.png" : 1,
+      "\/complex-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : false,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 9.912041656207293
+  },
+  {
+    "configurationMilliseconds" : 0.0006666523404419422,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 134.66145837446675,
+    "policy" : "allowAll",
+    "repetition" : 1,
+    "requests" : {
+      "\/complex-unavailable\/beacon" : 1,
+      "\/complex-unavailable\/external.css" : 1,
+      "\/complex-unavailable\/external.js" : 1,
+      "\/complex-unavailable\/fetch" : 1,
+      "\/complex-unavailable\/font.woff2" : 1,
+      "\/complex-unavailable\/frame" : 1,
+      "\/complex-unavailable\/large.png" : 1,
+      "\/complex-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0010833609849214554,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 25.259666668716818,
+    "policy" : "blockExternalResources",
+    "repetition" : 1,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0014166580513119698,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 32.27016661548987,
+    "policy" : "blockExternalResources",
+    "repetition" : 2,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.000500003807246685,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 139.9094166699797,
+    "policy" : "allowAll",
+    "repetition" : 2,
+    "requests" : {
+      "\/complex-unavailable\/beacon" : 1,
+      "\/complex-unavailable\/external.css" : 1,
+      "\/complex-unavailable\/external.js" : 1,
+      "\/complex-unavailable\/fetch" : 1,
+      "\/complex-unavailable\/font.woff2" : 1,
+      "\/complex-unavailable\/frame" : 1,
+      "\/complex-unavailable\/large.png" : 1,
+      "\/complex-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0007916823960840702,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 173.66224998841062,
+    "policy" : "allowAll",
+    "repetition" : 3,
+    "requests" : {
+      "\/complex-unavailable\/beacon" : 1,
+      "\/complex-unavailable\/external.css" : 1,
+      "\/complex-unavailable\/external.js" : 1,
+      "\/complex-unavailable\/fetch" : 1,
+      "\/complex-unavailable\/font.woff2" : 1,
+      "\/complex-unavailable\/frame" : 1,
+      "\/complex-unavailable\/large.png" : 1,
+      "\/complex-unavailable\/poster.png" : 1
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "disabled",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  },
+  {
+    "configurationMilliseconds" : 0.0006666523404419422,
+    "contentDigest" : "02024dad20c163002234d3194db1cd0ea32826f67864e48c5d573410c097d6a0",
+    "fixture" : "complex",
+    "htmlBytes" : 34155,
+    "parseMilliseconds" : 20.58120834408328,
+    "policy" : "blockExternalResources",
+    "repetition" : 3,
+    "requests" : {
+
+    },
+    "reusedWebView" : true,
+    "ruleSource" : "installed",
+    "scenario" : "unavailable",
+    "webViewInitializationMilliseconds" : 0
+  }
+]
