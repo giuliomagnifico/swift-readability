@@ -12,6 +12,17 @@ public struct Readability {
         runner = ReadabilityRunner()
     }
 
+#if DEBUG
+    /// Last completed parse configuration; no blocked-request count is inferred.
+    public var resourceLoadingDiagnostics: ResourceLoadingDiagnostics? { runner.resourceLoadingDiagnostics }
+
+    /// Snapshotted at parse entry, so overlapping calls retain their own correlation.
+    public var resourceLoadingDiagnosticsHandler: (@MainActor (ResourceLoadingDiagnostics) -> Void)? {
+        get { runner.resourceLoadingDiagnosticsHandler }
+        nonmutating set { runner.resourceLoadingDiagnosticsHandler = newValue }
+    }
+#endif
+
     /// Parses the web page at the specified URL and returns a `ReadabilityResult`.
     ///
     /// - Parameters:
@@ -21,7 +32,8 @@ public struct Readability {
     /// - Throws: An error if fetching or parsing fails.
     public func parse(
         url: URL,
-        options: Readability.Options? = nil
+        options: Readability.Options? = nil,
+        resourceLoadingPolicy: ResourceLoadingPolicy = .allowAll
     ) async throws -> ReadabilityResult {
         // Fetch HTML content from the URL.
         let html = try await HTMLFetcher().fetch(url: url)
@@ -29,7 +41,8 @@ public struct Readability {
         return try await parse(
             html: html,
             options: options,
-            baseURL: nil
+            baseURL: nil,
+            resourceLoadingPolicy: resourceLoadingPolicy
         )
     }
 
@@ -44,12 +57,14 @@ public struct Readability {
     public func parse(
         html: String,
         options: Readability.Options?,
-        baseURL: URL?
+        baseURL: URL?,
+        resourceLoadingPolicy: ResourceLoadingPolicy = .allowAll
     ) async throws -> ReadabilityResult {
         try await runner.parseHTML(
             html,
             options: options,
-            baseURL: baseURL
+            baseURL: baseURL,
+            resourceLoadingPolicy: resourceLoadingPolicy
         )
     }
 }

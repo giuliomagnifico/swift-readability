@@ -17,6 +17,14 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
     private let scriptLoader = ScriptLoader(bundle: .module)
     private let encoder = JSONEncoder()
 
+    private let resourceRules: ReadabilityResourceRules
+    private var installedResourceRule: WKContentRuleList?
+    private var hasLoadedDocument = false
+#if DEBUG
+    private(set) var resourceLoadingDiagnostics: Readability.ResourceLoadingDiagnostics?
+    var resourceLoadingDiagnosticsHandler: (@MainActor (Readability.ResourceLoadingDiagnostics) -> Void)?
+#endif
+
     private var bootstrapsInstalled = false
     private var nextRequestID: UInt64 = 0
     private var reservedRequestID: UInt64?
@@ -29,13 +37,19 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
     var registeredUserScriptCount: Int { contentController.userScripts.count }
 
     override init() {
+        resourceRules = .shared
         parseDeadline = Self.defaultParseDeadline
         suppressedParserInvocations = 0
         super.init()
         createWebView()
     }
 
-    init(parseDeadline: TimeInterval, suppressedParserInvocations: Int = 0) {
+    init(
+        parseDeadline: TimeInterval,
+        suppressedParserInvocations: Int = 0,
+        resourceRules: ReadabilityResourceRules = .shared
+    ) {
+        self.resourceRules = resourceRules
         self.parseDeadline = parseDeadline
         self.suppressedParserInvocations = suppressedParserInvocations
         super.init()
@@ -54,9 +68,29 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
     func parseHTML(
         _ html: String,
         options: Readability.Options?,
-        baseURL: URL? = nil
+        baseURL: URL? = nil,
+        resourceLoadingPolicy: Readability.ResourceLoadingPolicy = .allowAll
     ) async throws -> ReadabilityResult {
         let requestID = reserveRequest()
+#if DEBUG
+        resourceLoadingDiagnostics = nil
+        let diagnosticsHandler = resourceLoadingDiagnosticsHandler
+        let startedAt = ProcessInfo.processInfo.systemUptime
+        let reusedWebView = hasLoadedDocument
+        let configurationStartedAt = ProcessInfo.processInfo.systemUptime
+#endif
+        let resourceConfiguration: (source: String, failed: Bool)
+        do {
+            resourceConfiguration = try await configureResources(resourceLoadingPolicy, requestID: requestID)
+        } catch {
+            if reservedRequestID == requestID { reservedRequestID = nil }
+            throw error
+        }
+#if DEBUG
+        let configurationMilliseconds = (ProcessInfo.processInfo.systemUptime - configurationStartedAt) * 1_000
+#else
+        _ = resourceConfiguration
+#endif
 
         do {
             try await installBootstrapsIfNeeded()
@@ -96,6 +130,16 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
                     optionsJSON: optionsJSON,
                     completion: continuation
                 )
+#if DEBUG
+                activeRequest?.diagnostics = Readability.ResourceLoadingDiagnostics(
+                    policy: resourceLoadingPolicy, ruleSource: resourceConfiguration.source,
+                    ruleInstalled: installedResourceRule != nil, reusedWebView: reusedWebView,
+                    configurationMilliseconds: configurationMilliseconds, parseMilliseconds: 0,
+                    configurationFailed: resourceConfiguration.failed
+                )
+                activeRequest?.startedAt = startedAt
+                activeRequest?.diagnosticsHandler = diagnosticsHandler
+#endif
                 activeRequest?.deadlineTask = Task { @MainActor [weak self] in
                     guard let self else { return }
                     try? await Task.sleep(nanoseconds: UInt64(self.parseDeadline * 1_000_000_000))
@@ -103,6 +147,7 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
                     self.expireRequest(id: requestID)
                 }
 
+                hasLoadedDocument = true
                 guard let navigation = webView.loadHTMLString(html, baseURL: baseURL) else {
                     failActiveRequest(with: Error.navigationDidNotStart, invalidate: true)
                     return
@@ -166,6 +211,36 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = self
         bootstrapsInstalled = false
+        installedResourceRule = nil
+        hasLoadedDocument = false
+    }
+
+    private func configureResources(
+        _ policy: Readability.ResourceLoadingPolicy,
+        requestID: UInt64
+    ) async throws -> (source: String, failed: Bool) {
+        try Task.checkCancellation()
+        if policy == .allowAll {
+            if let installedResourceRule {
+                contentController.remove(installedResourceRule)
+                self.installedResourceRule = nil
+            }
+            return ("disabled", false)
+        }
+        if installedResourceRule != nil { return ("installed", false) }
+        do {
+            let loaded = try await resourceRules.load()
+            guard reservedRequestID == requestID else { throw CancellationError() }
+            try Task.checkCancellation()
+            contentController.add(loaded.list)
+            installedResourceRule = loaded.list
+            return (loaded.source, false)
+        } catch {
+            guard reservedRequestID == requestID else { throw CancellationError() }
+            try Task.checkCancellation()
+            // Configuration failure retains the original loading path. No second parse.
+            return ("configuration_failed", true)
+        }
     }
 
     private func installBootstrapsIfNeeded() async throws {
@@ -291,6 +366,19 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
     private func completeActiveRequest(_ result: Result<ReadabilityResult, Swift.Error>) {
         guard let request = activeRequest else { return }
         activeRequest = nil
+#if DEBUG
+        if let observed = request.diagnostics {
+            let diagnostics = Readability.ResourceLoadingDiagnostics(
+                policy: observed.policy, ruleSource: observed.ruleSource,
+                ruleInstalled: observed.ruleInstalled, reusedWebView: observed.reusedWebView,
+                configurationMilliseconds: observed.configurationMilliseconds,
+                parseMilliseconds: (ProcessInfo.processInfo.systemUptime - request.startedAt) * 1_000,
+                configurationFailed: observed.configurationFailed
+            )
+            resourceLoadingDiagnostics = diagnostics
+            request.diagnosticsHandler?(diagnostics)
+        }
+#endif
         request.deadlineTask?.cancel()
         request.completion.resume(with: result)
     }
@@ -320,6 +408,11 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
         var navigation: WKNavigation?
         var deadlineTask: Task<Void, Never>?
         let completion: CheckedContinuation<ReadabilityResult, Swift.Error>
+#if DEBUG
+        var diagnostics: Readability.ResourceLoadingDiagnostics?
+        var diagnosticsHandler: (@MainActor (Readability.ResourceLoadingDiagnostics) -> Void)?
+        var startedAt: TimeInterval = 0
+#endif
     }
 
     enum Error: Swift.Error {

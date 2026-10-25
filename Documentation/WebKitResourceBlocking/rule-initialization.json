@@ -1,0 +1,74 @@
+[
+  {
+    "milliseconds" : 19.601083360612392,
+    "repetition" : 0,
+    "source" : "compiled",
+    "stage" : "lookup_and_compile"
+  },
+  {
+    "milliseconds" : 0.0009583309292793274,
+    "repetition" : 0,
+    "source" : "memory",
+    "stage" : "memory"
+  },
+  {
+    "milliseconds" : 0.24220830528065562,
+    "repetition" : 0,
+    "source" : "store",
+    "stage" : "persistent_store"
+  },
+  {
+    "milliseconds" : 0.6474999827332795,
+    "repetition" : 1,
+    "source" : "compiled",
+    "stage" : "lookup_and_compile"
+  },
+  {
+    "milliseconds" : 0.000500003807246685,
+    "repetition" : 1,
+    "source" : "memory",
+    "stage" : "memory"
+  },
+  {
+    "milliseconds" : 0.18479168647900224,
+    "repetition" : 1,
+    "source" : "store",
+    "stage" : "persistent_store"
+  },
+  {
+    "milliseconds" : 0.5898333620280027,
+    "repetition" : 2,
+    "source" : "compiled",
+    "stage" : "lookup_and_compile"
+  },
+  {
+    "milliseconds" : 0.00033335527405142784,
+    "repetition" : 2,
+    "source" : "memory",
+    "stage" : "memory"
+  },
+  {
+    "milliseconds" : 0.1784583437256515,
+    "repetition" : 2,
+    "source" : "store",
+    "stage" : "persistent_store"
+  },
+  {
+    "milliseconds" : 0.6133333663456142,
+    "repetition" : 3,
+    "source" : "compiled",
+    "stage" : "lookup_and_compile"
+  },
+  {
+    "milliseconds" : 0.0002500019036233425,
+    "repetition" : 3,
+    "source" : "memory",
+    "stage" : "memory"
+  },
+  {
+    "milliseconds" : 0.16633333871141076,
+    "repetition" : 3,
+    "source" : "store",
+    "stage" : "persistent_store"
+  }
+]

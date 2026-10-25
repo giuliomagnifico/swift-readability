@@ -47,6 +47,23 @@ READABILITY_BENCHMARK=1 swift test --filter ReadabilityTests/testBenchmarkPersis
 The persistent-runner tests cover sequential parsing, 100 consecutive parses on one runner, cancellation followed by successful recovery, timeout followed by a stale callback and recovery, and successful subsequent parsing after timeout or cancellation. They also cover stale-callback protection, no accumulation of `WKUserScript` instances or message handlers, and cases where `isProbablyReaderable` returns `false` while `Readability.parse()` succeeds.
 
 
+## Optional extraction resource blocking
+
+For HTML whose editorial content is already complete, opt in per parse:
+
+```swift
+let result = try await Readability().parse(
+    html: completeStaticHTML,
+    options: .init(shouldSanitize: true),
+    baseURL: articleURL,
+    resourceLoadingPolicy: .blockExternalResources
+)
+```
+
+The extraction WebView blocks secondary HTTP/HTTPS loads using a shared, cached WebKit content rule list. The main URLSession HTML download, bundled Readability/DOMPurify scripts and image URL attributes are preserved. Configuration failures use the original loading path without a second parse. The default remains `.allowAll`; pages whose editorial content depends on external scripts must retain that policy. A nonempty blocked result does not establish completeness.
+
+See [implementation, exact-equivalence tests, request counts, cold/warm benchmarks and limitations](Documentation/WebKitResourceBlocking/report.md). DEBUG builds also expose per-operation resource configuration diagnostics; no blocked-request count is inferred from WebKit.
+
 ## Features
 - **Parsing** <br>
 Parse a URL or HTML string into a structured article using [@mozilla/readability](https://github.com/@mozilla/readability).
