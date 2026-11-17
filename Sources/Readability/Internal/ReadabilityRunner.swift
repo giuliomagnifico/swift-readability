@@ -246,19 +246,12 @@ final class ReadabilityRunner: NSObject, WKNavigationDelegate {
     private func installBootstrapsIfNeeded() async throws {
         guard !bootstrapsInstalled else { return }
 
-        async let basicSourceTask = scriptLoader.load(.readabilityBasic)
-        async let sanitizedSourceTask = scriptLoader.load(.readabilitySanitized)
-        let (basicSource, sanitizedSource) = try await (basicSourceTask, sanitizedSourceTask)
+        let source = try await scriptLoader.load(.readability)
 
         guard !bootstrapsInstalled else { return }
 
         contentController.addUserScript(WKUserScript(
-            source: basicSource,
-            injectionTime: .atDocumentEnd,
-            forMainFrameOnly: true
-        ))
-        contentController.addUserScript(WKUserScript(
-            source: sanitizedSource,
+            source: source,
             injectionTime: .atDocumentEnd,
             forMainFrameOnly: true
         ))

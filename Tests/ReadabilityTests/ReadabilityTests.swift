@@ -59,7 +59,7 @@ final class ReadabilityTests: XCTestCase {
         await XCTAssertThrowsCancellation(first)
     }
 
-    func testPersistentRunnerInstallsExactlyTwoBootstrapScripts() async throws {
+    func testPersistentRunnerInstallsExactlyOneBootstrapScript() async throws {
         let runner = ReadabilityRunner()
         XCTAssertEqual(runner.registeredUserScriptCount, 0)
 
@@ -69,7 +69,7 @@ final class ReadabilityTests: XCTestCase {
                 options: .init(charThreshold: 100),
                 baseURL: URL(string: "https://example.com/bootstrap")
             )
-            XCTAssertEqual(runner.registeredUserScriptCount, 2)
+            XCTAssertEqual(runner.registeredUserScriptCount, 1)
         }
     }
 
@@ -147,7 +147,7 @@ final class ReadabilityTests: XCTestCase {
             return
         }
         XCTAssertEqual(second.title, "B")
-        XCTAssertEqual(runner.registeredUserScriptCount, 2)
+        XCTAssertEqual(runner.registeredUserScriptCount, 1)
         XCTAssertEqual(runner.registeredMessageHandlerCountForTesting, 1)
         XCTAssertFalse(runner.hasActiveTimeoutTaskForTesting)
 
@@ -163,7 +163,7 @@ final class ReadabilityTests: XCTestCase {
             return
         }
         XCTAssertEqual(third.title, "C")
-        XCTAssertEqual(runner.registeredUserScriptCount, 2)
+        XCTAssertEqual(runner.registeredUserScriptCount, 1)
         XCTAssertEqual(runner.registeredMessageHandlerCountForTesting, 1)
         XCTAssertFalse(runner.hasActiveTimeoutTaskForTesting)
     }

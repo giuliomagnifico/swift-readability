@@ -10,10 +10,8 @@ package actor ScriptLoader {
         case atDocumentEnd
         /// HTML template for generating reader content.
         case readerHTML
-        /// Basic Readability parsing script.
-        case readabilityBasic
-        /// Sanitized Readability parsing script.
-        case readabilitySanitized
+        /// Shared basic and sanitized Readability parsing script.
+        case readability
 
         /// The name of the resource file (without extension).
         var name: String {
@@ -24,17 +22,15 @@ package actor ScriptLoader {
                 return "AtDocumentEnd"
             case .readerHTML:
                 return "Reader"
-            case .readabilityBasic:
-                return "ReadabilityBasic"
-            case .readabilitySanitized:
-                return "ReadabilitySanitized"
+            case .readability:
+                return "Readability"
             }
         }
 
         /// The file extension of the resource.
         var ext: String {
             switch self {
-            case .atDocumentStart, .atDocumentEnd, .readabilityBasic, .readabilitySanitized:
+            case .atDocumentStart, .atDocumentEnd, .readability:
                 return "js"
             case .readerHTML:
                 return "html"

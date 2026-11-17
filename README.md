@@ -20,13 +20,15 @@ This project is a fork of [Ryu0118/swift-readability](https://github.com/Ryu0118
 
 The fork was originally developed for [Lettura](https://www.giuliomagnifico.dev/apps/lettura/), a native RSS reader for Apple platforms where article extraction is invoked repeatedly while opening articles. It is optimized for repeated parsing workloads by reusing a persistent `WKWebView` runner rather than creating a new web view for every parse.
 
-The runner installs its JavaScript bootstrap scripts once and reuses them. It has single-flight semantics: starting a new parse can invalidate or cancel the currently active parse. Request IDs reject stale callbacks, every parse has a global 10-second deadline, and the runner recovers after cancellation, timeout, or WebKit failure so it remains usable. `isProbablyReaderable` is treated as a heuristic rather than a gate, so `Readability.parse()` is still attempted when the heuristic returns `false`.
+The runner registers one shared JavaScript bootstrap for both basic and sanitized extraction, avoiding a duplicate copy of Mozilla Readability on each document. It has single-flight semantics: starting a new parse can invalidate or cancel the currently active parse. Request IDs reject stale callbacks, every parse has a global 10-second deadline, and the runner recovers after cancellation, timeout, or WebKit failure so it remains usable. Extraction calls `Readability.parse()` directly without running the unused `isProbablyReaderable` heuristic. The bundled Mozilla article debug log only serializes HTML when debugging is enabled.
 
 This is a deliberate trade-off, not a universal replacement for upstream. Upstream creates a separate `WKWebView` for each parse, providing stronger isolation and allowing independent concurrent parses. This fork prioritizes runner reuse and lower repeated-parsing overhead.
 
 ## Performance
 
 Repository benchmarks for the persistent runner:
+
+These measurements predate the shared-bootstrap and debug-log optimizations and have not been rerun for those changes.
 
 | Fixture | Persistent median | Cold median |
 | ------- | ----------------: | ----------: |
@@ -205,10 +207,10 @@ This project leverages several open source projects:
 
 In addition, the following files are distributed under the Mozilla Public License, Version 2.0 (MPL 2.0):
 - [webpack-resources/AtDocumentStart.js](./webpack-resources/AtDocumentStart.js)
-- [webpack-resources/ReadabilitySanitized.js](./webpack-resources/ReadabilitySanitized.js)
+- [webpack-resources/Readability.js](./webpack-resources/Readability.js)
 - [webpack-resources/Reader.html](./webpack-resources/Reader.html)
 - [webpack-resources/Reader.css](./webpack-resources/Reader.css)
 - [Sources/ReadabilityUI/Resources/AtDocumentStart.js](./Sources/ReadabilityUI/Resources/AtDocumentStart.js)
 - [Sources/ReadabilityUI/Resources/Reader.html](./Sources/ReadabilityUI/Resources/Reader.html)
-- [Sources/Readability/Resources/ReadabilitySanitized.js](./Sources/Readability/Resources/ReadabilitySanitized.js)
+- [Sources/Readability/Resources/Readability.js](./Sources/Readability/Resources/Readability.js)
 - [Sources/ReadabilityCore/ReaderStyle.swift](./Sources/ReadabilityCore/ReaderStyle.swift)

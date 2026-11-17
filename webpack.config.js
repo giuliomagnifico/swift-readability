@@ -7,8 +7,7 @@ module.exports = {
     mode: "production",
     entry: {
         AtDocumentStart: "./webpack-resources/AtDocumentStart.js",
-        ReadabilityBasic: "./webpack-resources/ReadabilityBasic.js",
-        ReadabilitySanitized: "./webpack-resources/ReadabilitySanitized.js",
+        Readability: "./webpack-resources/Readability.js",
     },
     output: {
         path: path.resolve(__dirname, 'Sources'),
@@ -23,6 +22,10 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /[/\\]@mozilla[/\\]readability[/\\]Readability\.js$/,
+                use: path.resolve(__dirname, 'webpack-resources/readability-debug-loader.js')
+            },
             {
                 test: /\.css$/,
                 use: [

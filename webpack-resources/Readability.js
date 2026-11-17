@@ -2,29 +2,36 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import { isProbablyReaderable, Readability } from "@mozilla/readability";
+import { Readability } from "@mozilla/readability";
 const DOMPurify = require("dompurify");
 
-function post(type, requestID, value) {
+function post(requestID, value) {
     webkit.messageHandlers.readabilityMessageHandler.postMessage({
-        Type: type,
+        Type: "ContentParsed",
         RequestID: requestID,
         Value: value
     });
 }
 
-// Installed once in the content controller, then invoked by Swift after each
-// document finishes loading. Options and the request ID remain per-request data.
-window.__swiftReadabilityParseSanitized = function({ requestID, options }) {
-    post("StateChange", requestID, isProbablyReaderable(document) ? "Available" : "Unavailable");
+// Both entry points share one bootstrap and one copy of Mozilla Readability.
+// Options and the request ID remain per-request data.
+window.__swiftReadabilityParseBasic = function({ requestID, options }) {
+    try {
+        const result = new Readability(document.cloneNode(true), options).parse();
+        post(requestID, JSON.stringify(result));
+    } catch (error) {
+        post(requestID, "null");
+    }
+};
 
+window.__swiftReadabilityParseSanitized = function({ requestID, options }) {
     try {
         const serializedDocument = new XMLSerializer().serializeToString(document);
         const cleanDocument = DOMPurify.sanitize(serializedDocument, { WHOLE_DOCUMENT: true });
         const parsedDocument = new DOMParser().parseFromString(cleanDocument, "text/html");
         const result = new Readability(parsedDocument, options).parse();
-        post("ContentParsed", requestID, JSON.stringify(result));
+        post(requestID, JSON.stringify(result));
     } catch (error) {
-        post("ContentParsed", requestID, "null");
+        post(requestID, "null");
     }
 };

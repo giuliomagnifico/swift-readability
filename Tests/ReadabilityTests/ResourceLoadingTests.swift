@@ -95,7 +95,7 @@ final class ResourceLoadingTests: XCTestCase {
         _ = try await runner.parseHTML(document, options: plainOptions, baseURL: URL(string: server.origin))
         XCTAssertGreaterThan(server.requests.values.reduce(0, +), afterBlocked, "Switching to the default policy removes the installed rule")
         XCTAssertEqual(runner.resourceLoadingDiagnostics?.ruleInstalled, false)
-        XCTAssertEqual(runner.registeredUserScriptCount, 2)
+        XCTAssertEqual(runner.registeredUserScriptCount, 1)
     }
 
     func testSharedCompilationReuseAndPersistentStoreLookup() async throws {
@@ -132,7 +132,7 @@ final class ResourceLoadingTests: XCTestCase {
         }
         XCTAssertEqual(rules.compilationCount, 1)
         XCTAssertEqual(server.requests["/failure/external.js"], 2, "Exactly one original navigation per parse")
-        XCTAssertEqual(runner.registeredUserScriptCount, 2)
+        XCTAssertEqual(runner.registeredUserScriptCount, 1)
     }
 
     func testRuleIsInstalledAgainAfterTimeoutRecreatesTheWebView() async throws {
@@ -153,7 +153,7 @@ final class ResourceLoadingTests: XCTestCase {
         XCTAssertFalse(result.content.isEmpty)
         XCTAssertEqual(runner.resourceLoadingDiagnostics?.ruleInstalled, true)
         XCTAssertEqual(runner.resourceLoadingDiagnostics?.reusedWebView, false)
-        XCTAssertEqual(runner.registeredUserScriptCount, 2)
+        XCTAssertEqual(runner.registeredUserScriptCount, 1)
         XCTAssertEqual(server.requests.values.reduce(0, +), 0)
     }
 
